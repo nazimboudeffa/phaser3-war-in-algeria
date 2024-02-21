@@ -35,6 +35,19 @@ class LoadScene extends Phaser.Scene
     }
 }
 
+class MenuScene extends Phaser.Scene
+{
+    constructor()
+    {
+        super({ key: 'menu', active: false });
+    }
+
+    create ()
+    {
+        this.add.text(100, 100, 'Menu', { fill: '#0f0' });
+    }
+}
+
 class PlayScene extends Phaser.Scene
 {
     constructor()
@@ -52,8 +65,8 @@ class PlayScene extends Phaser.Scene
 const config = {
     type: Phaser.AUTO,
     parent: 'phaser3-war-in-algeria',
-    width: 720,
-    height: 1280,
+    width: 800,
+    height: 600,
     scene: [
         LoadScene, PlayScene
     ]
