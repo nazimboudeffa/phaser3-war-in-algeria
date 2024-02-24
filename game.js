@@ -8,6 +8,10 @@ class LoadScene extends Phaser.Scene
     preload ()
     {
         this.load.image('algeria', 'assets/algeria.png');
+        this.load.image('location', 'assets/location.png');
+        this.load.image('algiers', 'assets/algiers-transformed.png');
+        this.load.image('eye', 'assets/eye.png');
+        this.load.video('milkbar-explosion', 'assets/milkbar-explosion.mp4');
 
         let loadingBar = this.add.graphics({
             fillStyle: {
@@ -58,9 +62,57 @@ class PlayScene extends Phaser.Scene
     create ()
     {
         this.add.image(0, 0, 'algeria').setOrigin(0, 0);
+
+        const location = this.add.sprite(436, 13, 'location').setOrigin(0, 0).setInteractive({ cursor: 'pointer' });
+
+        location.on('pointerdown', () =>
+        {
+            this.scene.start('map');
+        });
     }
 }
 
+
+class MapScene extends Phaser.Scene
+{
+    constructor()
+    {
+        super({ key: 'map', active: false });
+    }
+
+    create ()
+    {
+        this.add.image(0, 0, 'algiers').setOrigin(0, 0);
+
+        const eye = this.add.sprite(35, 30, 'eye').setOrigin(0, 0).setInteractive({ cursor: 'pointer' });
+        eye.setTint(0x00ff00);
+
+        const eye2 = this.add.sprite(710, 662, 'eye').setOrigin(0, 0).setInteractive({ cursor: 'pointer' });
+
+        let cam = this.cameras.main;
+
+        this.input.on("pointermove", function (p) {
+            if (!p.isDown) return;
+        
+            cam.scrollX -= (p.x - p.prevPosition.x) / cam.zoom;
+            cam.scrollY -= (p.y - p.prevPosition.y) / cam.zoom;
+        });
+
+        eye.on('pointerdown', () =>
+        {
+            this.scene.start('play');
+        });
+
+        eye2.on('pointerdown', () =>
+        {
+            const intro = this.add.video(710, 662, 'milkbar-explosion');
+            intro.play();
+            intro.on('complete', () => {
+                intro.destroy();
+            });
+        });
+    }
+}
 
 const config = {
     type: Phaser.AUTO,
@@ -68,7 +120,7 @@ const config = {
     width: 800,
     height: 600,
     scene: [
-        LoadScene, PlayScene
+        LoadScene, PlayScene, MapScene
     ]
 };
 
