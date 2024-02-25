@@ -76,6 +76,7 @@ class MenuScene extends Phaser.Scene
         });
 
         camp1.on('pointerdown', () => {
+            music.stop();
             this.scene.start('play');
         });
 
@@ -92,6 +93,7 @@ class MenuScene extends Phaser.Scene
         });
 
         camp2.on('pointerdown', () => {
+            music.stop();
             this.scene.start('play');
         });
 
