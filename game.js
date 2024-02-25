@@ -16,6 +16,10 @@ class LoadScene extends Phaser.Scene
         this.load.image('play-button', 'assets/play-button.png');
         this.load.image('casino', 'assets/casino.png');
         this.load.image('milkbar', 'assets/milkbar.png');
+        this.load.image('start', 'assets/start.png');
+        this.load.image('camp1', 'assets/camp1.png');
+        this.load.image('camp2', 'assets/camp2.png');
+        this.load.audio('moriconne', 'assets/menu.mp3');
         this.load.video('milkbar-explosion', 'assets/milkbar-explosion.mp4');
         this.load.video('attentat-casino', 'assets/attentat-casino-cut.mp4');
 
@@ -41,7 +45,7 @@ class LoadScene extends Phaser.Scene
 
     create ()
     {
-        this.scene.start('play');
+        this.scene.start('menu');
     }
 }
 
@@ -54,7 +58,54 @@ class MenuScene extends Phaser.Scene
 
     create ()
     {
-        this.add.text(100, 100, 'Menu', { fill: '#0f0' });
+        let music = this.sound.add('moriconne');
+        music.play();
+        music.loop = true; 
+
+
+        const camp1 = this.add.sprite(106, 20, 'camp1').setOrigin(0, 0).setInteractive({ cursor: 'pointer' });
+
+        camp1.on('pointerover', function (event)
+        {
+            this.setTint(0x00ff00);
+        });
+
+        camp1.on('pointerout', function (event)
+        {
+            this.clearTint();
+        });
+
+        camp1.on('pointerdown', () => {
+            this.scene.start('play');
+        });
+
+        const camp2 = this.add.sprite(424, 20, 'camp2').setOrigin(0, 0).setInteractive({ cursor: 'pointer' });
+
+        camp2.on('pointerover', function (event)
+        {
+            this.setTint(0x00ff00);
+        });
+
+        camp2.on('pointerout', function (event)
+        {
+            this.clearTint();
+        });
+
+        camp2.on('pointerdown', () => {
+            this.scene.start('play');
+        });
+
+
+        let startButton = this.add.image(200, 478, 'start').setOrigin(0, 0);
+        this.tweens.add({
+            targets: startButton,
+            alpha: 0,
+            ease: 'Linear1',
+            duration: 500,
+            repeat: -1,
+            yoyo: true
+        });
+
     }
 }
 
@@ -197,7 +248,7 @@ const config = {
     width: 800,
     height: 600,
     scene: [
-        LoadScene, PlayScene, MapScene, GameSceneCorniche, GameSceneMilkBar
+        LoadScene, MenuScene, PlayScene, MapScene, GameSceneCorniche, GameSceneMilkBar
     ]
 };
 
